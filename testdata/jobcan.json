@@ -1,0 +1,61 @@
+{
+    "Input":[
+        {
+            "action":"move",
+            "url":"https://id.jobcan.jp/users/sign_in?app_key=atd"
+        },
+        {
+            "action":"input",
+            "target":[
+                {
+                    "id":"user_email"
+                }
+            ],
+            
+            "text":"yositaka.koizumi@escco.co.jp"
+        },
+        {
+            "action":"input",
+            "target":[
+                {
+                    "id":"user_password"
+                }
+            ],
+            "text":"1111##syunk"
+        },
+        
+        {
+            "action":"click",
+            "target":[
+                {
+                    "id":"login_button"
+                }
+            ]
+            
+        },
+        
+        {
+            "action":"sleep",
+            "value":10
+        },
+        {
+            "action":"click",
+            "target":[
+                {
+                    "tag":"header"
+                },
+                {
+                    "tag":"li"
+                }
+            ]
+            
+        },
+        {
+            "action":"sleep",
+            "value":10
+        }
+    ],
+    "Output":[
+
+    ]
+}

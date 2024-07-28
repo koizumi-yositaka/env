@@ -1,0 +1,19 @@
+{
+    "Input":[
+        {
+            "action":"move",
+            "url":"http://localhost/service/eco-pf/WebApp/DESolution/Login.aspx"
+        },
+        {
+            "action":"screen_shot",
+            "target":[
+                {
+                    "id":"txtUser"
+                }
+            ]
+        }
+    ],
+    "Output":[
+
+    ]
+}
