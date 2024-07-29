@@ -148,7 +148,8 @@ class ControlDisplay(object):
 
 
         # 行ごとにデータを取得して表示
-        for index, row in df.iterrows():          
+        for index, row in df.iterrows():     
+            if row["Flg"]==1: continue      
             try:
                 target=self.driver.find_element(By.XPATH,target_xpath)
                 exe_button=self.driver.find_element(By.XPATH,"/html/body/form/div[3]/div[2]/div/div/div/div/div[1]/div[1]/div/input[1]")
