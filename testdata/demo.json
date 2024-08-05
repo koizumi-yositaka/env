@@ -2,7 +2,7 @@
     "Input":[
         {
             "action":"move",
-            "url":"http://localhost/service/eco-pf/WebApp/DESolution/Login.aspx"
+            "url":"http://ecopf-dev-02/service/tutorial/webapp/desolution/login.aspx"
         },
         {
             "action":"screen_shot",
@@ -68,7 +68,7 @@
             "action":"mouse_over",
             "target":[
                 {
-                    "xpath":"/html/body/form/table/tbody/tr[1]/td/div[2]/div/table[12]/tbody/tr"
+                    "xpath":"//*[@id=\"Tree1\"]/table[12]/tbody/tr"
                 }
             ]
         },
@@ -76,7 +76,7 @@
             "action":"click",
             "target":[
                 {
-                    "xpath":"/html/body/form/table/tbody/tr[1]/td/div[2]/div/div[12]/table[3]/tbody/tr/td[4]/span/a"
+                    "xpath":"//*[@id=\"Tree1t51\"]/a"
                 }
             ]
         },

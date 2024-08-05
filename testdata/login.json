@@ -1,0 +1,49 @@
+{
+    "Input":[
+        {
+            "action":"move",
+            "url":"${{env.url}}"
+        },
+        {
+            "action":"screen_shot",
+            "target":[
+                {
+                    "id":"txtUser"
+                }
+            ]
+        },
+        {
+            "action":"input",
+            "target":[
+                {
+                    "id":"txtUser"
+                }
+            ],
+            
+            "text":"${{env.user}}"
+        },
+        {
+            "action":"input",
+            "target":[
+                {
+                    "id":"txtPassword"
+                }
+            ],
+            "text":"${{env.pass}}"
+        },
+    
+        {
+            "action":"click",
+            "target":[
+                {
+                    "id":"btnLogin"
+                }
+            ]
+            
+        }
+        
+    ],
+    "Output":[
+
+    ]
+}

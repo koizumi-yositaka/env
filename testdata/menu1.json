@@ -1,0 +1,78 @@
+{
+    "Input":[
+        
+        {
+            "action":"sleep",
+            "value":10
+        },
+        {
+            "action":"click",
+            "target":[
+                {
+                    "xpath":"//*[@id=\"tblTop\"]/tbody/tr/td[${{arg.menu1}}]"
+                }
+                
+            ]
+            
+        },
+        {
+            "action":"move_display_frame",
+            "target":[
+                {
+                    "id":"pnlBrowser"
+                }
+            ]
+        },
+        {
+            "action":"move_frame",
+            "target":[
+                {
+                    "id":"FrameMain"
+                }
+            ]
+        },
+        {
+            "action":"move_frame",
+            "target":[
+                {
+                    "id":"FrameL"
+                }
+            ]
+        },
+        {
+            "action":"click",
+            "target":[
+                {
+                    "id":"cell_Anch_${{arg.menu2}}"
+                }
+                
+            ]
+            
+        },
+        {
+            "action":"move_parent_frame"
+        },
+        {
+            "action":"move_parent_frame"
+        },
+        {
+            "action":"move_parent_frame"
+        },
+        {
+            "action":"move_display_frame",
+            "target":[
+                {
+                    "id":"pnlBrowser"
+                }
+            ]
+        },
+        {
+            "action":"sleep",
+            "value":5
+        }
+        
+    ],
+    "Output":[
+
+    ]
+}

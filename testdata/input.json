@@ -1,0 +1,23 @@
+{
+    "Input":[
+        {
+            "action":"move_frame",
+            "target":[
+                {
+                    "id":"FrameMain"
+                }
+            ]
+        },
+        {
+            "action":"test_input",
+            "inputdata":"${{arg.inputdata}}"
+        },
+        {
+            "action":"sleep",
+            "value":20
+        }
+    ],
+    "Output":[
+
+    ]
+}

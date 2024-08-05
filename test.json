@@ -1,0 +1,35 @@
+[
+    {
+        "Area":"Add",
+        "IsAllow":true,
+        "Condit":"condit for add row",
+        "Alart":"unmatch message",
+        "DefaultValueSet":"default value set"
+    },
+    {
+        "Area":"Edit",
+        "IsAllow":true
+    },
+    {
+        "Area":"Delete",
+        "IsAllow":true,
+        "Condit":"condit for  delete row",
+        "Alart":"unmatch message"
+    },
+    {
+        "Area":"Insert",
+        "IsAllow":true
+    },
+    {
+        "Area":"Copy",
+        "IsAllow":true
+    },
+    {
+        "Area":"BtnLocate",
+        "Locate":"Footer"
+    },
+    {
+        "Area":"Reflect",
+        "IsAllow":true
+    }
+]
