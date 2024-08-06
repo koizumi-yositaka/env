@@ -10,11 +10,34 @@
         },
         {
             "action":"test_input",
-            "inputdata":"${{arg.inputdata}}"
+            "inputdata":"${{test.inputdata}}"
+        },
+
+        {
+            "action":"move_parent_frame"
         },
         {
-            "action":"sleep",
-            "value":20
+            "action":"move_parent_frame"
+        },
+        {
+            "action":"move_display_frame",
+            "target":[
+                {
+                    "id":"pnlBrowser"
+                }
+            ]
+        },
+        {
+            "action":"move_frame",
+            "target":[
+                {
+                    "id":"FrameMain"
+                }
+            ]
+        },
+        {
+            "action":"test_output",
+            "outputdata":"${{test.outputdata}}"
         }
     ],
     "Output":[

@@ -1,0 +1,19 @@
+[
+    {
+        "file": "testdata/login.json",
+        "arg": {}
+    },
+    {
+        "file": "testdata/menu1.json",
+        "arg": {
+            "menu1": "2",
+            "menu2": "あきる台POC入力画面"
+        }
+    },
+    {
+        "file": "testdata/input.json",
+        "arg": {
+            "inputdata": "${{test.inputdata}}"
+        }
+    }
+]

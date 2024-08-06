@@ -1,56 +1,16 @@
-from modules.action_by_json import ControlDisplay
+from modules.action_by_json import *
 def main():
     env={
         "url":"http://localhost/service/eco-pf/webapp/desolution/login.aspx",
         "user":"u011",
         "pass":"test"
     }
-    
+    #test_dataは配列でテストデータをループしていく
     cd=ControlDisplay("Chrome",env)
-    cd.read_scenario(
-        [
-            {
-                "file":"testdata/login.json",
-                "arg":{}
-            },
-            {
-                "file":"testdata/menu1.json",
-                "arg":{
-                    "menu1":"2",
-                    "menu2":"あきる台POC入力画面"
-                }
-            },
-            {
-                "file":"testdata/input.json",
-                "arg":{
-                    "inputdata":[
-                        {
-                            "id":"appointment_name",
-                            "type":"text",
-                            "value":"AAAAAA",
-                        },
-                        {
-                            "id":"受診者名前",
-                            "type":"text",
-                            "value":"BBBB",
-                        },
-                        {
-                            "id":"preferred_date1",
-                            "type":"text",
-                            "value":"2024/09/24",
-                        },
-                        {
-                            "id":"資格",
-                            "type":"radio",
-                            "value":"0402",
-                        },
-                        {
-                            "id":"申込確認ボタン",
-                            "type":"button"
-                        }
-                    ]
-                }
-            }
-        ]
-    )
+    files=os.listdir(scenario_folder)
+    for file_name in files:
+        cd.read_scenario(
+            file_name[:file_name.index(".")],["test1","test2"]
+        )
+    
 

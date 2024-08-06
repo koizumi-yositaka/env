@@ -1,0 +1,50 @@
+{
+    "inputdata":[
+        {
+            "id": "appointment_name",
+            "type": "text",
+            "value": "AAAAAA"
+        },
+        {
+            "id": "受診者名前",
+            "type": "text",
+            "value": "BBBB"
+        },
+        {
+            "id": "オプション検査希望",
+            "type": "radio",
+            "value": "1"
+        },
+        {
+            "id": "preferred_date1",
+            "type": "text",
+            "value": "2024/09/24"
+        },
+        {
+            "id": "general_check",
+            "type": "checkbox",
+            "value": "0701,0703"
+        },
+        {
+            "id": "申込確認ボタン",
+            "type": "button"
+        }
+    ],
+    "outputdata":[
+        {
+            "id": "appointment_name",
+            "type": "label",
+            "value": "AAAAAA"
+        },
+        {
+            "id": "preferred_date1",
+            "type": "label",
+            "value": ""
+        },
+        {
+            "id": "preferred_date1",
+            "type": "label",
+            "value": "胸部検診"
+        }
+    ]
+}

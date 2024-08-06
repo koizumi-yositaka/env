@@ -4,6 +4,7 @@ import time
 import datetime
 import os
 import glob
+import base64
 import re
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -13,6 +14,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 import pandas as pd
 timeout =10
+scenario_folder="user/scenarios"
+result_folder="user/result"
 def reset_folder(folder_path):
     files=glob.glob(os.path.join(folder_path,"*"))
     for file in files:
@@ -21,9 +24,24 @@ def reset_folder(folder_path):
             print(f'{file} を削除しました。')
         except Exception as e:
             print(f'{file} の削除中にエラーが発生しました: {e}')
-
-
-
+            
+def get_scenario_by_name (scenario_name):
+    file_path=f"{scenario_folder}/{scenario_name}.json"
+    #vdata=json.load(j)
+    data=[]
+    with open(file_path,'r',encoding="UTF-8") as s:
+        data=json.load(s)
+    return data
+def get_testdata ():
+    folder_path="user/testdata"
+    files=os.listdir(folder_path)
+    test_data={}
+    for file in files:
+        if file.endswith(".json"):
+            with open(f"{folder_path}/{file}",'r',encoding="UTF-8") as j:
+                data=json.load(j)
+                test_data[file[:file.index(".")]]=data
+    return test_data
 class ControlDisplay(object):
     def __init__(self,type,env):
         if type=="Chrome":
@@ -35,19 +53,15 @@ class ControlDisplay(object):
             self.driver = webdriver.Chrome(options=options)
             self.driver.maximize_window()
             self.env=env
+            self.all_test_data=get_testdata()
     def get_parameter(self,value):
-        print("get_parameter",value)
         pattern = r'\${{(.*?)}}'
         matches = re.findall(pattern, value)
         if matches:
-            print("Matches found:")
             for match in matches:
-                print(match)
-                
                 params=match.split(".")
                 result=None
                 for index,param in enumerate(params):
-                    print(index,param)
                     if index==0:
                         if param=="env":
                             #環境変数
@@ -55,11 +69,13 @@ class ControlDisplay(object):
                         elif param=="arg":
                             #引数
                             result=self.arg
+                        elif param=="test":
+                            #テストケース
+                            result=self.test_data
                         else:
                             result=params[0]
 
                     else:
-                        print(param in result)
                         #さらに
                         if param in result and result:
                             result=result[param]
@@ -69,30 +85,41 @@ class ControlDisplay(object):
                     value = value.replace("${{"+match+"}}",result)
                 else:
                     value=result
-                print(value)
             return value
                 
         else:
-            print("No matches found.")
+
             return value     
 
-    def read_scenario(self,scenarios):
-        for scenario in scenarios:
+    def read_scenario(self,scenario_name,test_data_name_list):
+        scenarios=get_scenario_by_name(scenario_name)
+        now=datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+        for test_data_name in test_data_name_list:
+            print(f"{test_data_name}開始")
+            self.result_folder=os.path.join(result_folder,now,f"シナリオ{scenario_name}-テストデータ{test_data_name}")
+            os.makedirs(os.path.join(self.result_folder,"img"), exist_ok=True)
+            for index,scenario in enumerate(scenarios):
+            
+                with open(scenario["file"],"r",encoding="UTF-8") as j:
+                    data=json.load(j)
+                    try:
+                        for action in data["Input"]:
+                            
+                            self.arg=scenario["arg"]
+                            self.test_data=self.all_test_data[test_data_name]
+                            self.control(action)
+                            
+                            print(action,"完了")
+                        
+                    except Exception as e:
 
-            with open(scenario["file"],"r",encoding="UTF-8") as j:
-                data=json.load(j)
-                try:
-                    for action in data["Input"]:
-                        self.arg=scenario["arg"]
-                        self.control(action)
-                        print(action,"完了")
-                   
-                except Exception as e:
-
-                    print("Error",e)
-                    dt_now=datetime.datetime.now()
-                    self.driver.save_screenshot("Error.png")
-                    self.driver.quit()
+                        print("Error",e)
+                        dt_now=datetime.datetime.now()
+                        self.driver.execute_script("document.activeElement.blur();")
+                        time.sleep(5)
+                        self.save_screen_shot("Error.png")
+                        self.driver.quit()
+                self.save_screen_shot(f"完了{str(index)}.png")
         self.driver.quit()
                      
 
@@ -138,7 +165,7 @@ class ControlDisplay(object):
 
         if data["action"] == "move":
             if "url" in data:
-                print(data["url"])
+
                 self.driver.get(self.get_parameter(data["url"]))  
             else:
                 print("キーエラー:url")
@@ -156,10 +183,8 @@ class ControlDisplay(object):
             for iframe in iframes:
                 print(iframe.get_attribute("id"))
                 if iframe.get_attribute("style") and "display: none" not in iframe.get_attribute("style"):
-                    print("iframe",iframe)
                     #wait.until(expected_conditions.frame_to_be_available_and_switch_to_it(iframe))     # type: ignore
                     self.driver.switch_to.frame(iframe)
-                    print("Switched to the iframe.")
                     break
             
         elif data["action"]=="click":
@@ -181,7 +206,6 @@ class ControlDisplay(object):
                    target_item.clear()
                 target_item.send_keys(input_text)
         elif data["action"]=="move_parent_frame":
-            print("parentframe")
             self.driver.switch_to.parent_frame()
         elif data["action"]=="wait_all_element_load":
             WebDriverWait(self.driver, 10).until(expected_conditions.presence_of_all_elements_located)
@@ -201,10 +225,10 @@ class ControlDisplay(object):
                 print("targetが見つかりません",data) 
                 return            
             wait.until(expected_conditions.element_to_be_clickable(target_item))
-            dt_now=datetime.datetime.now()
+            
             # Get Screen Shot
-            filePath=os.path.join(os.path.dirname(os.path.abspath(__file__)),"img",dt_now.isoformat()+".png")
-            self.driver.save_screenshot(data["target"][0]["id"]+".png")
+            self.save_screen_shot(data["target"][0]["id"]+".png")
+            #self.driver.save_screenshot(data["target"][0]["id"]+".png")
         elif data["action"]=="test_json":
             self.test()
         elif data["action"]=="test_input":
@@ -220,6 +244,9 @@ class ControlDisplay(object):
                 
                 if input["type"]=="text":
                     elem=self.driver.find_element(By.ID, input["id"])
+                    if not elem:
+                        print(f"ERROR {input['id']}が見つかりません")
+                        return 
                     elem.send_keys(value)
                 elif input["type"]=="radio":
                     name=input["id"]
@@ -230,9 +257,24 @@ class ControlDisplay(object):
                     if elem:
                         elem.click()
                     else:
-                        print("ERROR ラジオボタンが見つかりません")
+                        print(f"ERROR ラジオボタン{name}が見つかりません")
                         return
+                elif input["type"]=="checkbox":
                     
+                    checkbox_id=input['id']
+                    for val in value.split(","):
+                        
+                        elem = WebDriverWait(self.driver, 10).until(
+                            expected_conditions.presence_of_element_located(
+                                (By.XPATH, f"//div[@id='{checkbox_id}']//input[@type='checkbox' and @value='{val}']"))
+                            
+                            
+                        )
+                        if elem:
+                            elem.click()
+                        else:
+                            print(f"ERROR チェックボックス{checkbox_id}が見つかりません")
+                            return                
                 elif input["type"]=="button":
                     ##wait.until(expected_conditions.element_to_be_clickable(target_item))# type: ignore
                     elem=self.driver.find_element(By.ID, input["id"])
@@ -243,9 +285,94 @@ class ControlDisplay(object):
                 else:
                     elem=self.driver.find_element(By.ID, input["id"])
                     elem.send_keys(value)
-
+        elif data["action"]=="test_output":
+            print(data)
+            output_result=[]
+            if "outputdata" not in data:
+                print("inputdataがありません")
+                return
+            output_data=self.get_parameter(data["outputdata"])
+            for output in output_data:
+                elem=None
+                value=""
+                result=""
+                if "value" in output:
+                    value=output["value"]
+                
+                if output["type"]=="text":
+                    elem=self.driver.find_element(By.ID, output["id"])
+                    if not elem:
+                        print(f"ERROR {output['id']}が見つかりません")
+                        return 
+                    elem.send_keys(value)
+                elif output["type"]=="radio":
+                    name=output["id"]
                     
-        
+                    elem = WebDriverWait(self.driver, 10).until(
+                        expected_conditions.presence_of_element_located((By.XPATH, f"//input[@name='{name}' and @value='{value}']"))
+                    )
+                    if elem:
+                        elem.click()
+                    else:
+                        print(f"ERROR ラジオボタン{name}が見つかりません")
+                        return
+                elif output["type"]=="checkbox":
+                    
+                    checkbox_id=output['id']
+                    for val in value.split(","):
+                        
+                        elem = WebDriverWait(self.driver, 10).until(
+                            expected_conditions.presence_of_element_located(
+                                (By.XPATH, f"//div[@id='{checkbox_id}']//input[@type='checkbox' and @value='{val}']"))
+                            
+                            
+                        )
+                        if elem:
+                            elem.click()
+                        else:
+                            print(f"ERROR チェックボックス{checkbox_id}が見つかりません")
+                            return  
+                elif output["type"]=="label":
+                    elem=self.driver.find_element(By.ID, output["id"])
+                    result=elem.text  
+                else:
+                    elem=self.driver.find_element(By.ID, output["id"])
+                    elem.send_keys(value)
+                result_obj={
+                    "id":"",
+                    "expect":"",
+                    "current":"",
+                    "result":"",
+                }
+                result_obj["id"]=output['id']
+                result_obj["current"]=result
+                result_obj["expect"]=value
+                if result==value:
+                    result_obj["result"]="OK"
+                    print(f"{output['id']} OK")
+                else:
+                    result_obj["result"]="NG"
+                    
+                    print(f"{output['id']} NG EXPECT:{value} CURRENT:{result}")
+                output_result.append(result_obj)
+            export_test(os.path.join(self.result_folder,"test_result.xlsx"),output_result)
+            
+                
+    def save_screen_shot(self,filename, is_full_size=True):
+       # スクリーンショット設定
+        screenshot_config = {
+        # Trueの場合スクロールで隠れている箇所も含める、Falseの場合表示されている箇所のみ
+            "captureBeyondViewport": is_full_size,
+        }
+
+        # スクリーンショット取得
+        base64_image = self.driver.execute_cdp_cmd("Page.captureScreenshot", screenshot_config)
+        file_path=os.path.join(self.result_folder,"img",filename)
+        # ファイル書き出し
+        with open(file_path, "wb") as fh:
+            fh.write(base64.urlsafe_b64decode(base64_image["data"]))     
+            
+            return     
             
     def test(self):
         path="functest/TestData.xlsx"
@@ -303,3 +430,13 @@ class ControlDisplay(object):
                     self.driver.find_element(By.XPATH,"/html/body/div[1]/div[3]/div/button").click()
                 
         df.to_excel(output_path, index=False)
+
+def export_test(output_path,data):
+    path="template/template.xlsx"
+    df = pd.read_excel(path)
+    for index,row in enumerate(data):
+        df.at[index,"id"]=row["id"]
+        df.at[index,"expect"]=row["expect"]
+        df.at[index,"current"]=row["current"]
+        df.at[index,"result"]=row["result"]
+    df.to_excel(output_path, index=False)
