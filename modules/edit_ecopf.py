@@ -10,7 +10,7 @@ def main():
     files=os.listdir(scenario_folder)
     for file_name in files:
         cd.read_scenario(
-            file_name[:file_name.index(".")],["test1","test2"]
+            file_name[:file_name.index(".")],["test1"]
         )
     
 

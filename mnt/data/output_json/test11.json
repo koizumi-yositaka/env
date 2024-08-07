@@ -1,0 +1,19 @@
+{
+    "inputdata": [
+        {
+            "id": "予約語名",
+            "type": "text",
+            "value": "CheckBoxList"
+        },
+        {
+            "id": "引数項",
+            "type": "text",
+            "value": "~:テキスト~:FALSE~:画面遷移しますか？~:@DEMsgBox(テストです)~:ツールチップ~@color:red;background-color:pink;~@false//AAA,BBB,CCC/AAA"
+        },
+        {
+            "id": "実行",
+            "type": "button"
+        }
+    ],
+    "outputdata": []
+}

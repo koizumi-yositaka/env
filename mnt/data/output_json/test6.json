@@ -1,20 +1,19 @@
 {
-    "inputdata":[
+    "inputdata": [
         {
             "id": "予約語名",
             "type": "text",
-            "value": "Button"
+            "value": "Image"
         },
         {
             "id": "引数項",
             "type": "text",
-            "value": "テストボタン~#テストボタンです~#~#Button~:https://www.google.co.jp/~:true~:画面遷移しますか？~:@DEMsgBox(テストです)"
+            "value": "200 - 150~:Desert.jpg~:https://www.google.co.jp/~:~:テストです~@color:red;background-color:pink;~;"
         },
         {
             "id": "実行",
             "type": "button"
         }
     ],
-    "outputdata":[
-    ]
+    "outputdata": []
 }

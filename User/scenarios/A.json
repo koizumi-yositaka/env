@@ -6,8 +6,8 @@
     {
         "file": "testdata/menu1.json",
         "arg": {
-            "menu1": "2",
-            "menu2": "あきる台POC入力画面"
+            "menu1": "1",
+            "menu2": "クリエータ関数テスト用2"
         }
     },
     {

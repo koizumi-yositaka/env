@@ -1,20 +1,19 @@
 {
-    "inputdata":[
+    "inputdata": [
         {
             "id": "予約語名",
             "type": "text",
-            "value": "Button"
+            "value": "RadioButtonList"
         },
         {
             "id": "引数項",
             "type": "text",
-            "value": "テストボタン~#テストボタンです~#~#Button~:https://www.google.co.jp/~:true~:画面遷移しますか？~:@DEMsgBox(テストです)"
+            "value": "RadioButtonListID~:テキスト~:TRUE~:~:@DEMsgBox(テストです)~:ツールチップ~@color:red;background-color:pink;~@false//AAA,BBB,CCC/~@AAA"
         },
         {
             "id": "実行",
             "type": "button"
         }
     ],
-    "outputdata":[
-    ]
+    "outputdata": []
 }
