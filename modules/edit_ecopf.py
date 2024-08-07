@@ -1,16 +1,18 @@
 from modules.action_by_json import *
 def main():
-    env={
-        "url":"http://localhost/service/eco-pf/webapp/desolution/login.aspx",
-        "user":"u011",
-        "pass":"test"
-    }
-    #test_dataは配列でテストデータをループしていく
-    cd=ControlDisplay("Chrome",env)
-    files=os.listdir(scenario_folder)
-    for file_name in files:
-        cd.read_scenario(
-            file_name[:file_name.index(".")],["test1"]
-        )
+
+    ##files=os.listdir(scenario_folder)
+    with open("user/setting.json" ,'r',encoding="UTF-8") as f:
+        data=json.load(f)
+        env=data["env"]
+        #test_dataは配列でテストデータをループしていく
+        cd=ControlDisplay("Chrome",env)
+        for plan in data["plans"]:
+            cd.read_scenario(
+                plan["scenario"],
+                plan["testdatas"]
+            )
+    
+    
     
 

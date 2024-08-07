@@ -1,0 +1,16 @@
+
+{
+    "env":{
+        "url":"http://localhost/service/eco-pf/webapp/desolution/login.aspx",
+        "user":"u011",
+        "pass":"test"
+    },
+    "plans":[
+        {
+            "scenario":"A",
+            "testdatas":[
+                "test1"
+            ]
+        }
+    ]
+}
