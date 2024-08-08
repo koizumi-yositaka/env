@@ -113,12 +113,13 @@ class ControlDisplay(object):
                         
                     except Exception as e:
 
-                        print("Error",e)
+                        #print("Errodr",e)
                         dt_now=datetime.datetime.now()
                         self.driver.execute_script("document.activeElement.blur();")
                         time.sleep(5)
                         self.save_screen_shot("Error.png")
-                        self.driver.quit()
+                        break
+                        #self.driver.quit()
                 self.save_screen_shot(f"完了{str(index)}.png")
         self.driver.quit()
                      
