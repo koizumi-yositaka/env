@@ -12,7 +12,7 @@ with open(template_path, 'r', encoding='utf-8') as file:
     template = json.load(file)
 
 # Ensure output directory exists
-output_dir = 'mnt/data/output_json'
+output_dir = 'user/testData'
 os.makedirs(output_dir, exist_ok=True)
 
 # Iterate over each row in the Excel file

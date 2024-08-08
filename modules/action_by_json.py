@@ -237,6 +237,8 @@ class ControlDisplay(object):
                 return
             input_data=self.get_parameter(data["inputdata"])
             for input in input_data:
+                isDisabled="isDisabled" in input and input["isDisabled"]
+                
                 elem=None
                 value=""
                 if "value" in input:
@@ -247,7 +249,10 @@ class ControlDisplay(object):
                     if not elem:
                         print(f"ERROR {input['id']}が見つかりません")
                         return 
-                    elem.send_keys(value)
+                    if isDisabled:
+                        self.driver.execute_script(f"arguments[0].value = '{value}';", elem)
+                    else:
+                        elem.send_keys(value)
                 elif input["type"]=="radio":
                     name=input["id"]
                     
@@ -334,6 +339,10 @@ class ControlDisplay(object):
                             return  
                 elif output["type"]=="label":
                     elem=self.driver.find_element(By.ID, output["id"])
+                    result=elem.text  
+                elif output["type"]=="_ECOPF_Caution":
+                    elem=self.driver.find_element(By.XPATH, "//div[@id='strMsgText1']//span")
+                    
                     result=elem.text  
                 else:
                     elem=self.driver.find_element(By.ID, output["id"])
